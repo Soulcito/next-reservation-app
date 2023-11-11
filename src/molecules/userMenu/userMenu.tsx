@@ -1,12 +1,17 @@
 "use client";
 import { useState, useCallback } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
+import { signOut } from "next-auth/react";
 import Avatar from "@molecules/avatar/Avatar";
 import MenuItem from "@molecules/menuItem/MenuItem";
 import useRegisterModal from "@custom-hooks/useRegisterModal";
+import useLoginModal from "@custom-hooks/useLoginModal";
 
+//TODO: temas pendientes currentUser
+//TODO: No olvidar lo de signOut
 const UserMenu = () => {
 	const registerModal = useRegisterModal();
+	const loginModal = useLoginModal();
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toogleOpen = useCallback(() => {
@@ -75,7 +80,7 @@ const UserMenu = () => {
 					<div className="flex flex-col cursor-pointer">
 						<>
 							<MenuItem onClick={registerModal.onOpen} label="Registrate" />
-							<MenuItem onClick={() => {}} label="Iniciar Sesion" />
+							<MenuItem onClick={loginModal.onOpen} label="Iniciar Sesion" />
 						</>
 					</div>
 				</div>

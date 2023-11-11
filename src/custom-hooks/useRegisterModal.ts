@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import RegisterModalStore from "./interfaces/registerModal.interface";
+import RegisterModalStore from "@/custom-hooks/interfaces/registerModal.interface";
 
 
 const useRegisterModal = create<RegisterModalStore>( set => ({
