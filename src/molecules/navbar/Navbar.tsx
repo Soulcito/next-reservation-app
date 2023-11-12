@@ -3,6 +3,7 @@ import Container from "@molecules/container/Container";
 import Logo from "@molecules/logo/Logo";
 import Search from "@molecules/search/Search";
 import UserMenu from "@molecules/userMenu/userMenu";
+import Categories from "@molecules/categories/Categories/Categories";
 import NavbarProps from "./interfaces/navbarProps.interface";
 
 const Navbar: React.FC<NavbarProps> = ({ currentUser }) => (
@@ -25,6 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ currentUser }) => (
 				</div>
 			</Container>
 		</div>
+		<Categories />
 	</div>
 );
 
