@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import ClientProcessor from "@molecules/clientProcessor/ClientProcessor";
 import Navbar from "@molecules/navbar/Navbar";
+import ToasterProvider from "@providers/ToasterProvider";
 import LoginModal from "@molecules/modals/LoginModal";
 import RegisterModal from "@molecules/modals/RegisterModal";
-import ToasterProvider from "@providers/ToasterProvider";
+import RentModal from "@molecules/modals/RentModal";
 import getCurrentUser from "@/app/serverActions/getCurrentUser";
 import "@atoms/globals.css";
 
@@ -25,6 +26,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 					<ToasterProvider />
 					<LoginModal />
 					<RegisterModal />
+					<RentModal />
 					<Navbar currentUser={currentUser} />
 					{children}
 				</ClientProcessor>

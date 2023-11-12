@@ -1,9 +1,45 @@
 "use client";
+
+import { useCallback } from "react";
+import qs from "query-string";
+import { useRouter, useSearchParams } from "next/navigation";
+import UpdatedQuery from "@molecules/categories/CategoryBox/interfaces/updatedQuery.interface";
 import CategoryBoxProps from "@molecules/categories/CategoryBox/interfaces/categoryBoxProps.interface";
 
 const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, selected }) => {
+	const router = useRouter();
+	const params = useSearchParams();
+
+	const handleClick = useCallback(() => {
+		let currentQuery = {};
+
+		if (params) {
+			currentQuery = qs.parse(params.toString());
+		}
+
+		const updatedQuery: UpdatedQuery = {
+			...currentQuery,
+			category: label,
+		};
+
+		if (params?.get("category") === label) {
+			delete updatedQuery.category;
+		}
+
+		const url = qs.stringifyUrl(
+			{
+				url: "/",
+				query: updatedQuery,
+			},
+			{ skipNull: true },
+		);
+
+		router.push(url);
+	}, [label, params, router]);
+
 	return (
 		<div
+			onClick={handleClick}
 			className={`
 				flex
 				flex-col
@@ -12,7 +48,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({ icon: Icon, label, selected }
 				gap-2
 				p-3
 				border-b-2
-				hover: text-neutral-800
+				hover:text-neutral-800
 				transition
 				cursor-pointer
 				${selected ? "border-b-neutral-800" : "border-transparent"}
