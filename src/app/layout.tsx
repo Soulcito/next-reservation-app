@@ -5,6 +5,7 @@ import Navbar from "@molecules/navbar/Navbar";
 import LoginModal from "@molecules/modals/LoginModal";
 import RegisterModal from "@molecules/modals/RegisterModal";
 import ToasterProvider from "@providers/ToasterProvider";
+import getCurrentUser from "@/app/serverActions/getCurrentUser";
 import "@atoms/globals.css";
 
 export const metadata: Metadata = {
@@ -14,7 +15,9 @@ export const metadata: Metadata = {
 
 const font = Open_Sans({ subsets: ["latin"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+	const currentUser = await getCurrentUser();
+
 	return (
 		<html lang="en">
 			<body className={font.className}>
@@ -22,7 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 					<ToasterProvider />
 					<LoginModal />
 					<RegisterModal />
-					<Navbar />
+					<Navbar currentUser={currentUser} />
 					{children}
 				</ClientProcessor>
 			</body>
