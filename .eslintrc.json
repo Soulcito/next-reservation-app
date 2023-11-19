@@ -2,6 +2,7 @@
   "extends": "next/core-web-vitals",
   "rules": {
     "curly": "error",
-    "no-empty": "error"
+    "no-empty": "error",
+	 "react-hooks/rules-of-hooks": "off"
   }
 }

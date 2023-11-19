@@ -1,8 +1,8 @@
-"use client";
-import { useState, useEffect, useCallback } from "react";
-import { IoMdClose } from "react-icons/io";
-import Button from "@molecules/buttons/Button";
-import ModalProps from "@molecules/modals/interfaces/modal.interface";
+'use client';
+import { useState, useEffect, useCallback } from 'react';
+import { IoMdClose } from 'react-icons/io';
+import Button from '@molecules/buttons/Button';
+import ModalProps from '@molecules/modals/interfaces/modal.interface';
 
 const Modal: React.FC<ModalProps> = ({
 	disabled,
@@ -38,6 +38,14 @@ const Modal: React.FC<ModalProps> = ({
 		}
 		onSubmit();
 	}, [disabled, onSubmit]);
+
+	const handleSecondaryAction = useCallback(() => {
+		if (disabled || !secondaryAction) {
+			return;
+		}
+
+		secondaryAction();
+	}, [disabled, secondaryAction]);
 
 	if (!isOpen) {
 		return null;
@@ -80,8 +88,8 @@ const Modal: React.FC<ModalProps> = ({
 							translate
 							duration-300
 							h-full
-							${showModal ? "translate-y-0" : "translate-y-full"}
-							${showModal ? "opacity:100" : "opacity:0"}
+							${showModal ? 'translate-y-0' : 'translate-y-full'}
+							${showModal ? 'opacity:100' : 'opacity:0'}
 						`}
 					>
 						<div
@@ -142,6 +150,14 @@ const Modal: React.FC<ModalProps> = ({
 										w-full
 									"
 								>
+									{secondaryAction && secondaryActionLabel && (
+										<Button
+											disabled={disabled}
+											label={secondaryActionLabel}
+											onClick={handleSecondaryAction}
+											outline
+										/>
+									)}
 									<Button disabled={disabled} label={actionLabel} onClick={handleSubmit} />
 								</div>
 								{footer}

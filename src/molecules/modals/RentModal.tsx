@@ -16,7 +16,7 @@ import { STEPS } from './enum/rentSteps.enum';
 import { categories } from '@molecules/categories/Categories/constants/categories';
 import CategoryInput from '@molecules/inputs/CategoryInput';
 import CountrySelect from '@molecules/inputs/CountrySelect';
-import Map from '@molecules/map/Map';
+//import Map from '@molecules/map/Map';
 
 const RentModal = () => {
 	const rentModal = useRentModal();
@@ -78,6 +78,14 @@ const RentModal = () => {
 	const onNext = () => {
 		setStep(value => value + 1);
 	};
+
+	const Map = useMemo(
+		() =>
+			dynamic(() => import('@molecules/map/Map'), {
+				ssr: false,
+			}),
+		[],
+	);
 
 	let bodyContent = (
 		<div className="flex flex-col gap-8">
