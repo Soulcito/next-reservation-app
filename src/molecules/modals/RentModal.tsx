@@ -1,27 +1,26 @@
-"use client";
+'use client';
 
-import axios from "axios";
-import { toast } from "react-hot-toast";
-import { FieldValues, useForm, SubmitHandler } from "react-hook-form";
-import dynamic from "next/dynamic";
-import { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { FieldValues, useForm, SubmitHandler } from 'react-hook-form';
+import dynamic from 'next/dynamic';
+import { useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
-import Modal from "./Modal";
-import Categories from "@molecules/categories/Categories/Categories";
-import Heading from "@molecules/heading/Heading";
-import Input from "@molecules/inputs/Input";
-import useRentModal from "@custom-hooks/useRentModal";
-import { STEPS } from "./enum/rentSteps.enum";
-import { categories } from "@molecules/categories/Categories/constants/categories";
-import CategoryInput from "@molecules/inputs/CategoryInput";
+import Modal from './Modal';
+import Categories from '@molecules/categories/Categories/Categories';
+import Heading from '@molecules/heading/Heading';
+import Input from '@molecules/inputs/Input';
+import useRentModal from '@custom-hooks/useRentModal';
+import { STEPS } from './enum/rentSteps.enum';
+import { categories } from '@molecules/categories/Categories/constants/categories';
+import CategoryInput from '@molecules/inputs/CategoryInput';
+import CountrySelect from '@molecules/inputs/CountrySelect';
+import Map from '@molecules/map/Map';
 
 const RentModal = () => {
 	const rentModal = useRentModal();
 	const [step, setStep] = useState(STEPS.CATEGORY);
-
-	const onBack = () => {};
-	const onNext = () => {};
 
 	const {
 		register,
@@ -31,24 +30,24 @@ const RentModal = () => {
 		reset,
 	} = useForm<FieldValues>({
 		defaultValues: {
-			category: "",
+			category: '',
 			location: null,
 			guestCount: 1,
 			roomCount: 1,
 			bathroomCount: 1,
-			imageSrc: "",
+			imageSrc: '',
 			price: 1,
-			title: "",
-			description: "",
+			title: '',
+			description: '',
 		},
 	});
 
-	const location = watch("location");
-	const category = watch("category");
-	const guestCount = watch("guestCount");
-	const roomCount = watch("roomCount");
-	const bathroomCount = watch("bathroomCount");
-	const imageSrc = watch("imageSrc");
+	const location = watch('location');
+	const category = watch('category');
+	const guestCount = watch('guestCount');
+	const roomCount = watch('roomCount');
+	const bathroomCount = watch('bathroomCount');
+	const imageSrc = watch('imageSrc');
 
 	const setCustomValue = (id: string, value: unknown) => {
 		setValue(id, value, {
@@ -60,17 +59,25 @@ const RentModal = () => {
 
 	const actionLabel = useMemo(() => {
 		if (step === STEPS.PRICE) {
-			return "Create";
+			return 'Create';
 		}
-		return "Next";
+		return 'Next';
 	}, [step]);
 
 	const secondaryActionLabel = useMemo(() => {
 		if (step === STEPS.CATEGORY) {
 			return undefined;
 		}
-		return "Back";
+		return 'Back';
 	}, [step]);
+
+	const onBack = () => {
+		setStep(value => value - 1);
+	};
+
+	const onNext = () => {
+		setStep(value => value + 1);
+	};
 
 	let bodyContent = (
 		<div className="flex flex-col gap-8">
@@ -88,7 +95,7 @@ const RentModal = () => {
 				{categories.map(item => (
 					<div key={item.label} className="col-span-1">
 						<CategoryInput
-							onClick={category => setCustomValue("category", category)}
+							onClick={category => setCustomValue('category', category)}
 							selected={category === item.label}
 							label={item.label}
 							icon={item.icon}
@@ -98,6 +105,16 @@ const RentModal = () => {
 			</div>
 		</div>
 	);
+
+	if (step === STEPS.LOCATION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading title="Donde esta ubicado tu lugar?" subtitle="Ayudanos a encontrarte!" />
+				<CountrySelect value={location} onChange={value => setCustomValue('location', value)} />
+				<Map center={location?.latlng} />
+			</div>
+		);
+	}
 
 	return (
 		<Modal
