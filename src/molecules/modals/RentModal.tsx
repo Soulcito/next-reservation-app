@@ -16,6 +16,8 @@ import { STEPS } from './enum/rentSteps.enum';
 import { categories } from '@molecules/categories/Categories/constants/categories';
 import CategoryInput from '@molecules/inputs/CategoryInput';
 import CountrySelect from '@molecules/inputs/CountrySelect';
+import Counter from '@molecules/inputs/Counter';
+import ImageUpload from '@molecules/inputs/ImageUpload';
 //import Map from '@molecules/map/Map';
 
 const RentModal = () => {
@@ -120,6 +122,43 @@ const RentModal = () => {
 				<Heading title="Donde esta ubicado tu lugar?" subtitle="Ayudanos a encontrarte!" />
 				<CountrySelect value={location} onChange={value => setCustomValue('location', value)} />
 				<Map center={location?.latlng} />
+			</div>
+		);
+	}
+
+	if (step === STEPS.INFO) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading title="Comparte algunos conceptos basicos sobre tu lugar." subtitle="Que comodidades tienes?" />
+				<Counter
+					onChange={value => setCustomValue('guestCount', value)}
+					value={guestCount}
+					title="Huespedes"
+					subtitle="Cuantos huespedes permites?"
+				/>
+				<hr />
+				<Counter
+					onChange={value => setCustomValue('roomCount', value)}
+					value={roomCount}
+					title="Habitaciones"
+					subtitle="Cuantas habitaciones tienes?"
+				/>
+				<hr />
+				<Counter
+					onChange={value => setCustomValue('bathroomCount', value)}
+					value={bathroomCount}
+					title="Baños"
+					subtitle="Cuantos baños tienes?"
+				/>
+			</div>
+		);
+	}
+
+	if (step === STEPS.IMAGES) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading title="Agrega una foto de tu lugar" subtitle="Muestra a los huespedes como luce tu lugar" />
+				<ImageUpload onChange={value => setCustomValue('imageSrc', value)} value={imageSrc} />
 			</div>
 		);
 	}
