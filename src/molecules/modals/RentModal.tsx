@@ -22,6 +22,7 @@ import ImageUpload from '@molecules/inputs/ImageUpload';
 
 const RentModal = () => {
 	const rentModal = useRentModal();
+	const [isLoading, setIsLoading] = useState(false);
 	const [step, setStep] = useState(STEPS.CATEGORY);
 
 	const {
@@ -159,6 +160,24 @@ const RentModal = () => {
 			<div className="flex flex-col gap-8">
 				<Heading title="Agrega una foto de tu lugar" subtitle="Muestra a los huespedes como luce tu lugar" />
 				<ImageUpload onChange={value => setCustomValue('imageSrc', value)} value={imageSrc} />
+			</div>
+		);
+	}
+
+	if (step === STEPS.DESCRIPTION) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading title="Como describirias tu lugar" subtitle="Describe de manera breve y lo mejor posible" />
+				<Input id="title" label="title" disabled={isLoading} register={register} errors={errors} required />
+				<hr />
+				<Input
+					id="description"
+					label="description"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+					required
+				/>
 			</div>
 		);
 	}
