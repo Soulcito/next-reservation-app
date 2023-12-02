@@ -8,7 +8,6 @@ import { useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 
 import Modal from './Modal';
-import Categories from '@molecules/categories/Categories/Categories';
 import Heading from '@molecules/heading/Heading';
 import Input from '@molecules/inputs/Input';
 import useRentModal from '@custom-hooks/useRentModal';
@@ -18,15 +17,16 @@ import CategoryInput from '@molecules/inputs/CategoryInput';
 import CountrySelect from '@molecules/inputs/CountrySelect';
 import Counter from '@molecules/inputs/Counter';
 import ImageUpload from '@molecules/inputs/ImageUpload';
-//import Map from '@molecules/map/Map';
 
 const RentModal = () => {
+	const router = useRouter();
 	const rentModal = useRentModal();
 	const [isLoading, setIsLoading] = useState(false);
 	const [step, setStep] = useState(STEPS.CATEGORY);
 
 	const {
 		register,
+		handleSubmit,
 		setValue,
 		watch,
 		formState: { errors },
@@ -89,6 +89,30 @@ const RentModal = () => {
 			}),
 		[],
 	);
+
+	const onSubmit: SubmitHandler<FieldValues> = data => {
+		if (step !== STEPS.PRICE) {
+			return onNext();
+		}
+
+		setIsLoading(true);
+
+		axios
+			.post('/api/listing', data)
+			.then(() => {
+				toast.success('Listing created!');
+				router.refresh();
+				reset();
+				setStep(STEPS.CATEGORY);
+				rentModal.onClose();
+			})
+			.catch(() => {
+				toast.error('Something went wrong');
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
+	};
 
 	let bodyContent = (
 		<div className="flex flex-col gap-8">
@@ -182,12 +206,29 @@ const RentModal = () => {
 		);
 	}
 
+	if (step === STEPS.PRICE) {
+		bodyContent = (
+			<div className="flex flex-col gap-8">
+				<Heading title="Ahora, define el valor" subtitle="Cuanto es el cargo por noche?" />
+				<Input
+					id="price"
+					label="price"
+					formatPrice
+					type="number"
+					disabled={isLoading}
+					register={register}
+					errors={errors}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<Modal
 			isOpen={rentModal.isOpen}
 			title="Airbnb tu casa!"
 			actionLabel={actionLabel}
-			onSubmit={onNext}
+			onSubmit={handleSubmit(onSubmit)}
 			secondaryActionLabel={secondaryActionLabel}
 			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
 			onClose={rentModal.onClose}
